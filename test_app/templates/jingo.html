@@ -4,14 +4,20 @@
   flag off
 {% endif %}
 
+{{ waffle.flag('sugar', 'flag sugar on') }}
+
 {% if waffle.switch('switch') %}
   switch on
 {% else %}
   switch off
 {% endif %}
 
+{{ waffle.switch('sugar', 'switch sugar on') }}
+
 {% if waffle.sample('sample') %}
   sample on
 {% else %}
   sample off
 {% endif %}
+
+{{ waffle.sample('sugar', 'sample sugar on') }}
