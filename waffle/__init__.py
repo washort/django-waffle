@@ -37,7 +37,6 @@ def flag_is_active(request, flag_name):
         if flag_name in request.GET:
             return request.GET[flag_name] == '1'
 
-
     if flag.everyone:
         return True
     elif flag.everyone == False:

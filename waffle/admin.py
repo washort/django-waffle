@@ -23,14 +23,14 @@ class FlagAdmin(admin.ModelAdmin):
 
 def enable_switches(ma, request, qs):
     for switch in qs:
-        switch.active=True
+        switch.active = True
         switch.save()
 enable_switches.short_description = 'Enable the selected switches.'
 
 
 def disable_switches(ma, request, qs):
     for switch in qs:
-        switch.active=False
+        switch.active = False
         switch.save()
 disable_switches.short_description = 'Disable the selected switches.'
 
