@@ -14,14 +14,11 @@ class Command(BaseCommand):
             help='List existing flags.',
         ),
         make_option('--everyone',
-            action='store_true',
+            action='store',
             dest='everyone',
-            help='Activate flag for all users.',
-        ),
-        make_option('--deactivate',
-            action='store_false',
-            dest='everyone',
-            help='Deactivate flag for all users.',
+            help=('Control flag for all users. Use "on" or "off" '
+                  'to activate or deactivate the flag for all users, '
+                  'and "none" to rely on other triggers (like percent).'),
         ),
         make_option('--percent', '-p',
             action='store',
@@ -85,13 +82,19 @@ class Command(BaseCommand):
             try:
                 flag = Flag.objects.get(name=flag_name)
             except Flag.DoesNotExist:
-                raise CommandError("This flag doesn't exist")
+                raise CommandError("This flag doesn't exist.")
 
         # Loop through all options, setting Flag attributes that match
         # (ie. don't want to try setting flag.verbosity).
-        for option in options:
-            if hasattr(flag, option):
-                print "Setting %s: %s" % (option, options[option])
-                setattr(flag, option, options[option])
+        settings = ('percent', 'superusers', 'staff', 'authenticated',
+                    'rollout')
+        everyone_opts = {'on': True, 'off': False, 'none': None}
+        everyone = options['everyone'].lower()
+        if everyone in everyone_opts:
+            print 'Setting everyone: %s' % everyone
+            flag.everyone = everyone_opts[everyone]
+        for s in settings:
+            print 'Setting %s: %s' % (s, options[s])
+            setattr(flag, s, options[s])
 
         flag.save()
